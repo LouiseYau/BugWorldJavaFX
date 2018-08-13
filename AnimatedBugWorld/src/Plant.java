@@ -29,9 +29,9 @@ public class Plant extends Circle {//may change this to just extend circle but f
 		scaleTransition.setNode(this); 
 
 		//Setting the dimensions for scaling 
-		scaleTransition.setByY(-0.33); 
+		scaleTransition.setByY(-0.25); 
 		
-		scaleTransition.setByX(-0.33); 
+		scaleTransition.setByX(-0.25); 
 
 		//Setting the cycle count for the translation 
 		scaleTransition.setCycleCount(1); 

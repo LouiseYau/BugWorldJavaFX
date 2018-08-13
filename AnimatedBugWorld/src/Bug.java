@@ -15,14 +15,13 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
-/**to do: create method where bugs become hungry and fade over time if they do not eat
-if bugs are hungry then they eat if they are not hungry they stop eating move away from plant
-
+/**to do: create method where bugs become hungry and seek food and fade over time if they do not eat
+if they are not hungry they stop eating move away from plant
 
 method for bugs reproduce if they bugs of diff colour if they get to a certain size and meet another bug
 of the same size
 
-if plant shrinks to certain size it dies (removed from array and new plant generated elsewhere
+if plant shrinks to certain size it dies (removed from array) and new plant generated elsewhere
 
 get plant grow method to work**/
 
@@ -32,7 +31,7 @@ public class Bug extends Circle {
 	protected int id = 0;
 	protected static int idCounter;
 	protected String name;
-	
+
 
 	Stage primaryStage;
 	boolean eaten = false;
@@ -41,52 +40,55 @@ public class Bug extends Circle {
 		super(x,y,radius,color);
 		this.id = idCounter++;
 		this.name = name;
-		}
-	
-	public Bug(Stage primaryStage) {
-		super(2);
-		this.primaryStage = primaryStage;
-		double randDX = Math.random()*4;
-		double randDY = Math.random()*4;
-		this.setCenterX((float)(Math.random()*400));
-		this.setCenterY((float)(Math.random()*300));
-		if(randDX >1) {
-			this.dx=-dx;}
-		if (randDY>1) {
-			this.dy=-dy;}
 	}
+
+public Bug(Stage primaryStage) {
+		// TODO Auto-generated constructor stub
+	}
+
+	//	public Bug(Stage primaryStage) {
+//		super(2);
+//		this.primaryStage = primaryStage;
+//		double randDX = Math.random()*4;
+//		double randDY = Math.random()*4;
+//		this.setCenterX((float)(Math.random()*400));
+//		this.setCenterY((float)(Math.random()*300));
+//		if(randDX >1) {
+//			this.dx=-dx;}
+//		if (randDY>1) {
+//			this.dy=-dy;}
+//	}
 	/**----------------------------------------------------------------------------------------**/
-	public void animate(Scene scene,List<Plant> plantList, List<Bug> bugList) {
+	public void animate(Scene scene,List<Plant> plantList, List<Bug> bugList, Group root) {
+      moveRandom();
+		eatPlants(plantList, bugList,root);
+		eatOtherBugs(bugList);
+		// bugs change direction randomly after eating plant
+		if(dx==0) {
+			dx = -1.5f+Math.random()*3;
+			dy = -1.5f+Math.random()*3;	
 
-				eatPlants(plantList, bugList);
-				eatOtherBugs(bugList);
-				// bugs change direction randomly after eating plant
-				if(dx==0) {
-					dx = -1.5f+Math.random()*3;
-					dy = -1.5f+Math.random()*3;	
+		}
+		//bugs bounce off left or right wall 
+		if(getCenterX()+getTranslateX()< getRadius()||
+				getCenterX() + getTranslateX()+getRadius()>scene.getWidth()) {
+			dx = -dx;
+		}
+		// bugs bounce off top/bottom wall
+		if(getCenterY()+getTranslateY()< getRadius()||
+				getCenterY() + getTranslateY()+getRadius()>scene.getHeight()) {
+			dy = -dy;
 
-				}
-				//bugs bounce off left or right wall 
-				if(getCenterX()+getTranslateX()< getRadius()||
-						getCenterX() + getTranslateX()+getRadius()>scene.getWidth()) {
-					dx = -dx;
-				}
-				// bugs bounce off top/bottom wall
-				if(getCenterY()+getTranslateY()< getRadius()||
-						getCenterY() + getTranslateY()+getRadius()>scene.getHeight()) {
-					dy = -dy;
-
-				}
-				//if none of the above bugs move forward
-				setTranslateX(getTranslateX()+dx);//look up translate
-				setTranslateY(getTranslateY()+dy);
+		}
+		//if none of the above bugs move forward
+		setTranslateX(getTranslateX()+dx);//look up translate
+		setTranslateY(getTranslateY()+dy);
 
 	}
 	/**---------------------------------------------------------------------------------------------**/
 
 	//method to decrease size of plant if bee lands on it
-	
-	public void eatPlants(List<Plant> plantList, List<Bug> bugList) {
+	public void eatPlants(List<Plant> plantList, List<Bug> bugList, Group root) {
 		boolean found = false;
 
 		for (Plant p : plantList) {
@@ -102,7 +104,7 @@ public class Bug extends Circle {
 					dx=0;
 					dy=0;
 					if(p.getScaleX()<0.125) {
-						p.setFill(Color.LIGHTGREEN);
+						root.getChildren().remove(p);
 					}
 				}
 				break;
@@ -112,31 +114,41 @@ public class Bug extends Circle {
 	/**---------------------------------------------------------------------------------------**/	
 	public void eatOtherBugs( List<Bug> bugList) {	// carnivorous snails eat bees
 		boolean meet = false;
-		
+
 		for (Bug b:bugList) {
 
 			if (this.getBoundsInParent().intersects(b.getBoundsInParent())||b.getBoundsInParent().intersects(this.getBoundsInParent())) {
 				meet = true;
 			}
-			
+
 			if (meet){
 				if(this instanceof Snail) {
 
 					this.eat();
 					if(b instanceof Bee) {
-									
-					b.setEaten(true);
-						}
+
+						b.setEaten(true);
+					}
 					System.out.println(name+" ID="+id+" "+b.name+" "+b.id+" eaten="+b.eaten);
-					
+
 				}
 				break;
 			}
-			}
+			
 		}
-	
-		
-	
+	}
+	/**------------------------------------------------------------------------------**/
+public void moveRandom() {
+	double changeChecker = Math.random()*30;
+
+	if (changeChecker<1) {
+		dx = -1.5f+Math.random()*3;
+		dy = -1.5f+Math.random()*3;	
+
+		}
+	}
+			
+
 
 	/**------------------------------------------------------------------------------**/	
 	//bee eats plant and grows in size
@@ -190,7 +202,7 @@ public class Bug extends Circle {
 
 	}
 	/**-----------------------------------------------------------------------**/
-	
+
 
 	public boolean isEaten() {
 		return eaten;
@@ -208,7 +220,7 @@ public class Bug extends Circle {
 
 	public int getID() {
 		return id;
-		
+
 	}
 
 	public void setId(int id) {

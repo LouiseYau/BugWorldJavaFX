@@ -7,5 +7,9 @@ public class Bee extends Bug{
 		super(primaryStage, x, y, radius, color, name);
 		// TODO Auto-generated constructor stub
 	}
+	public Bee(Stage primaryStage, double x, double y, double radius, String name) {
+		super(primaryStage);
+
+	}
 
 }
