@@ -5,15 +5,15 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Snail extends Bug {
+public class Ladybug extends Bug {
 	private double dx = -1.5f+Math.random()*3;
 	private double dy = -1.5f+Math.random()*3;
-	
-	public Snail(Stage primaryStage, double x, double y, double radius, Color color,String name) {
+
+	public Ladybug(Stage primaryStage, double x, double y, double radius, Color color,String name) {
 		super(primaryStage, x, y, radius, color, name);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public void eat() {
 		//Creating scale Transition 
 		ScaleTransition scaleTransition = new ScaleTransition(); 
@@ -37,10 +37,9 @@ public class Snail extends Bug {
 
 		//Playing the animation 
 		scaleTransition.play(); 
-
 	}
 
-	
+
 }
 
 

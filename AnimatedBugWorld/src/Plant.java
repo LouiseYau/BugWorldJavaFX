@@ -5,19 +5,17 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Plant extends Circle {//may change this to just extend circle but for now plant
-//	circles still use many of the same fields and methods as bug circles
+	//	circles still use many of the same fields and methods as bug circles
 
 	private double dx = -1.5f+Math.random()*3;
 	private double dy = -1.5f+Math.random()*3;
-	Stage primaryStage;
-	
+	private Stage primaryStage;
+
 	public Plant(Stage primaryStage, double x, double y, double radius, Color color) {
 		super(x, y, radius, color);
-		
-	}
-	
 
-	
+	}
+
 	public void shrink() {
 		//Creating scale Transition 
 		ScaleTransition scaleTransition = new ScaleTransition(); 
@@ -30,7 +28,7 @@ public class Plant extends Circle {//may change this to just extend circle but f
 
 		//Setting the dimensions for scaling 
 		scaleTransition.setByY(-0.25); 
-		
+
 		scaleTransition.setByX(-0.25); 
 
 		//Setting the cycle count for the translation 
@@ -42,7 +40,7 @@ public class Plant extends Circle {//may change this to just extend circle but f
 		//Playing the animation 
 		scaleTransition.play(); 
 	}
-	
+
 	public void grow() {
 		//Creating scale Transition 
 		ScaleTransition scaleTransition = new ScaleTransition(); 
@@ -55,7 +53,7 @@ public class Plant extends Circle {//may change this to just extend circle but f
 
 		//Setting the dimensions for scaling 
 		scaleTransition.setByY(0.124); 
-		
+
 		scaleTransition.setByX(0.125); 
 
 		//Setting the cycle count for the translation 
@@ -67,7 +65,7 @@ public class Plant extends Circle {//may change this to just extend circle but f
 		//Playing the animation 
 		scaleTransition.play(); 
 	}
-	
+
 	public double getDx() {
 		return dx;
 	}

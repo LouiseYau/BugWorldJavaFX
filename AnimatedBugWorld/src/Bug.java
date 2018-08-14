@@ -33,7 +33,7 @@ public class Bug extends Circle {
 	protected String name;
 
 
-	Stage primaryStage;
+	private Stage primaryStage;
 	boolean eaten = false;
 	boolean eating = false;
 	public Bug(Stage primaryStage,double x, double y, double radius, Color color, String name) {
@@ -42,25 +42,13 @@ public class Bug extends Circle {
 		this.name = name;
 	}
 
-public Bug(Stage primaryStage) {
-		// TODO Auto-generated constructor stub
+	public Bug(Stage primaryStage) {
+
 	}
 
-	//	public Bug(Stage primaryStage) {
-//		super(2);
-//		this.primaryStage = primaryStage;
-//		double randDX = Math.random()*4;
-//		double randDY = Math.random()*4;
-//		this.setCenterX((float)(Math.random()*400));
-//		this.setCenterY((float)(Math.random()*300));
-//		if(randDX >1) {
-//			this.dx=-dx;}
-//		if (randDY>1) {
-//			this.dy=-dy;}
-//	}
 	/**----------------------------------------------------------------------------------------**/
-	public void animate(Scene scene,List<Plant> plantList, List<Bug> bugList, Group root) {
-      moveRandom();
+	public void update(Scene scene,List<Plant> plantList, List<Bug> bugList, Group root) {
+		moveRandom();
 		eatPlants(plantList, bugList,root);
 		eatOtherBugs(bugList);
 		// bugs change direction randomly after eating plant
@@ -112,7 +100,7 @@ public Bug(Stage primaryStage) {
 		}
 	}
 	/**---------------------------------------------------------------------------------------**/	
-	public void eatOtherBugs( List<Bug> bugList) {	// carnivorous snails eat bees
+	public void eatOtherBugs( List<Bug> bugList) {	// carnivorous ladybug eat bees
 		boolean meet = false;
 
 		for (Bug b:bugList) {
@@ -122,7 +110,7 @@ public Bug(Stage primaryStage) {
 			}
 
 			if (meet){
-				if(this instanceof Snail) {
+				if(this instanceof Ladybug) {
 
 					this.eat();
 					if(b instanceof Bee) {
@@ -130,26 +118,20 @@ public Bug(Stage primaryStage) {
 						b.setEaten(true);
 					}
 					System.out.println(name+" ID="+id+" "+b.name+" "+b.id+" eaten="+b.eaten);
-
 				}
 				break;
 			}
-			
 		}
 	}
 	/**------------------------------------------------------------------------------**/
-public void moveRandom() {
-	double changeChecker = Math.random()*30;
+	public void moveRandom() {
+		double changeChecker = Math.random()*30;//generate a random number between 0 and 30
 
-	if (changeChecker<1) {
-		dx = -1.5f+Math.random()*3;
-		dy = -1.5f+Math.random()*3;	
-
+		if (changeChecker<1) {//bug has a 1 in 30 chance of changing direction
+			dx = -1.5f+Math.random()*3;//speed is random between -1.5 and 3, this also randomly changes direction of bug
+			dy = -1.5f+Math.random()*3;	
 		}
 	}
-			
-
-
 	/**------------------------------------------------------------------------------**/	
 	//bee eats plant and grows in size
 	public void eat() {
