@@ -39,22 +39,31 @@ public class Plant extends Circle {//may change this to just extend circle but f
 
 		//Playing the animation 
 		scaleTransition.play(); 
+		
+//		this.setRadius(this.getRadius()-1);
+//
+//		if(this.getRadius() < 1) { // if plant is below size threshold, reduces radius to 0
+//			this.setRadius(0);
+//		}
+//	}
+//}
 	}
+	
 
 	public void grow() {
 		//Creating scale Transition 
 		ScaleTransition scaleTransition = new ScaleTransition(); 
 
 		//Setting the duration for the transition 
-		scaleTransition.setDuration(Duration.millis(6000)); 
+		scaleTransition.setDuration(Duration.millis(20)); 
 
 		//Setting the node for the transition 
 		scaleTransition.setNode(this); 
 
 		//Setting the dimensions for scaling 
-		scaleTransition.setByY(0.124); 
+		scaleTransition.setByY(0.006); 
 
-		scaleTransition.setByX(0.125); 
+		scaleTransition.setByX(0.006); 
 
 		//Setting the cycle count for the translation 
 		scaleTransition.setCycleCount(1); 
@@ -64,7 +73,18 @@ public class Plant extends Circle {//may change this to just extend circle but f
 
 		//Playing the animation 
 		scaleTransition.play(); 
-	}
+	
+
+			if(this.getRadius() > 5) {
+				this.setRadius(this.getRadius()+0.005);
+			}
+
+			if(this.getRadius() > 20) {
+				this.setRadius(20);
+			}
+		}
+
+	
 
 	public double getDx() {
 		return dx;
