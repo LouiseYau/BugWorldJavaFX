@@ -15,7 +15,13 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Color;
@@ -30,7 +36,7 @@ import javafx.geometry.Pos;
 
 public class BugWorld extends Application{
 	private static final int INDEFINITE = 0;
-	private int width = 500, height = 400;// width and height of stage
+	private int width = 550, height = 450;// width and height of stage
 	private double x, y; //x and y values of centre of circles (bugs and plants)
 	private double radius;// radiuses of circles (bugs and plants)
 	//Group is the root node in the scene graph, a circle object/many circles could be added 
@@ -46,14 +52,16 @@ public class BugWorld extends Application{
 	private Button stopButton = new Button("stop");
 	private Button addBeeButton = new Button("add bee");
 	private Button addPlantButton = new Button("add plant");
-	
+
+
 	//primaryStage is passed into the start method
 	public void start(Stage primaryStage) throws Exception {
+	
 		primaryStage.setTitle("Bug World");//title of stage is Bug World
 		root.getChildren().add(pane);
-		pane.setAlignment(Pos.BASELINE_CENTER);
+		pane.setAlignment(Pos.CENTER);
 		pane.setPadding((new Insets(height-30,width,0,130)));
-		
+
 		//add buttons to pane (Hbox)
 		pane.getChildren().add(playButton);
 		pane.getChildren().add(pauseButton);
@@ -74,9 +82,9 @@ public class BugWorld extends Application{
 	public void addBee(Stage primaryStage) {
 		/**create new bug in for loop, pass in primaryStage starting positions x and y, radius, color can be a random colour
 		by randomizing the rgb values Color.color(Math.random(), Math.random(), Math.random())**/
-		for(int i = 0; i<10;i++) {//for loop to create 10 bees
-			x=50+Math.random()*width-50;//assigning random number upto the width of the scene to the x variable 
-			y=50+Math.random()*height-50;//assigning random number upto the height of the scene to the y variable
+		for(int i = 0; i<25;i++) {//for loop to create 10 bees
+			x=50+Math.random()*width-100;//assigning random number upto the width of the scene to the x variable 
+			y=50+Math.random()*height-100;//assigning random number upto the height of the scene to the y variable
 			radius = 10;
 			Bug bee = new Bee(primaryStage, x,y,radius,Color.YELLOW,"Bee");
 			Image image = new Image("Bumblebee.png");
@@ -90,17 +98,17 @@ public class BugWorld extends Application{
 		for(int i =0;i< (int) (7+Math.random()*12);i++) {//for loop to create between 10 and 15 plants
 			x=50+Math.random()*450;//assigning random number upto the width of the scene to the x variable 
 			y=50+Math.random()*300;//assigning random number upto the height of the scene to the y variable
-			radius = 10+Math.random()*20;//random radius/size of circle
+			radius = 15+Math.random()*10;//random radius/size of circle
 			Plant flower = new Plant(primaryStage, x,y,radius,Color.GREEN);
-			Image image = new Image("flowers.png");
+			Image image = new Image("flowers2.png");
 			flower.setFill(new ImagePattern(image));
 			plantList.add(flower);//add bug to bugList 
 			root.getChildren().add(flower);//add plant to root (group)
 		}
-		for(int i =0;i< (int) (7+Math.random()*12);i++) {
+		for(int i =0;i< (int) (15+Math.random()*20);i++) {
 			x=10+Math.random()*450;//assigning random number upto the width of the scene to the x variable 
 			y=10+Math.random()*350;//assigning random number upto the height of the scene to the y variable
-			radius = 10+Math.random()*20;//random radius/size of circle
+			radius = 10+Math.random()*10;//random radius/size of circle
 			Plant plant = new Plant(primaryStage, x,y,radius,Color.GREEN);
 			Image image = new Image("kale.png");//new image using png file 
 			plant.setFill(new ImagePattern(image));//fill circle/plant object with image
@@ -118,7 +126,7 @@ public class BugWorld extends Application{
 			//rad = 5+Math.random()*10;//random radius/size of circle
 			radius = 5;
 			Bug Ladybug = new Ladybug(primaryStage, x,y,radius,Color.DODGERBLUE,"Ladybug");
-			Image image = new Image("Bug.png");
+			Image image = new Image("Ladybug2.png");
 			Ladybug.setFill(new ImagePattern(image));
 			bugList.add(Ladybug);//add bug to bugList 
 			root.getChildren().add(Ladybug);//adding each bug object to the Group root
@@ -128,7 +136,7 @@ public class BugWorld extends Application{
 	public void addRock(Stage primaryStage) {
 		/**create new bug in for loop, pass in primaryStage starting positions x and y, radius, color can be a random colour
 		by randomizing the rgb values Color.color(Math.random(), Math.random(), Math.random())**/
-		for(int i = 0; i<8;i++) {//for loop to create 10 bees
+		for(int i = 0; i<5;i++) {//for loop to create 10 bees
 			x=50+Math.random()*width-50;//assigning random number upto the width of the scene to the x variable 
 			y=50+Math.random()*height-80;//assigning random number upto the height of the scene to the y variable
 			radius = 20;
@@ -139,7 +147,7 @@ public class BugWorld extends Application{
 			root.getChildren().add(rock);//adding each bug object to the Group root
 		}
 	}
-	
+
 	//animateWorld method loops through bug list and calls update method 
 	public void animateWorld(Stage primaryStage) {
 		// new keyFrame where rate is 15milliseconds
@@ -154,9 +162,9 @@ public class BugWorld extends Application{
 						System.out.println(b.getName()+" "+b.getID()+" "+ " is dead");
 					}
 				}
-//				for(Plant p:plantList) {
-//					p.grow();
-//			}
+								for(Plant p:plantList) {
+									p.grow();
+							}
 			}
 		});
 		//make timelinebuilder a variable so can call methods play, pause, stop
@@ -165,7 +173,7 @@ public class BugWorld extends Application{
 		playButton(tl);
 		pauseButton(tl);
 		stopButton(tl);
-	
+
 	}
 
 
@@ -211,21 +219,28 @@ public class BugWorld extends Application{
 		});
 	}
 	public void AddPlantButton(Stage primaryStage) {//add a new bee on click of add plant button
-
+		
 		addPlantButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
+				double randomPlant= Math.random()*2;//random plant generator
 				x=5+Math.random()*width - 50;//assigning random number upto the width of the scene to the x variable 
 				y=5+Math.random()*height - 50;//assigning random number upto the height of the scene to the y variable
 				radius = 20;//random radius/size of circle
-				Plant c = new Plant(primaryStage, x,y,radius,Color.GREEN);
-				Image image = new Image("flowers.png");
-				c.setFill(new ImagePattern(image));
-				plantList.add(c);//add bug to bugList 
-				root.getChildren().add(c);
+				Plant p = new Plant(primaryStage, x,y,radius,Color.GREEN);
+				if(randomPlant<1) {
+					Image image = new Image("flowers2.png");
+					p.setFill(new ImagePattern(image));
+				}
+				else {
+					Image image = new Image("kale.png");
+					p.setFill(new ImagePattern(image));
+				}
+				plantList.add(p);//add bug to bugList 
+				root.getChildren().add(p);
 			}
 		});
 	}
-	
+
 
 	public static void main(String[] args) {
 		launch();
