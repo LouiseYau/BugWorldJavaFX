@@ -56,12 +56,11 @@ public class BugWorld extends Application{
 
 	//primaryStage is passed into the start method
 	public void start(Stage primaryStage) throws Exception {
-	
+
 		primaryStage.setTitle("Bug World");//title of stage is Bug World
 		root.getChildren().add(pane);
 		pane.setAlignment(Pos.CENTER);
 		pane.setPadding((new Insets(height-30,width,0,130)));
-
 		//add buttons to pane (Hbox)
 		pane.getChildren().add(playButton);
 		pane.getChildren().add(pauseButton);
@@ -79,6 +78,7 @@ public class BugWorld extends Application{
 		primaryStage.show();
 	}
 
+	/**-------------------------------------------------------------------------------------------**/
 	public void addBee(Stage primaryStage) {
 		/**create new bug in for loop, pass in primaryStage starting positions x and y, radius, color can be a random colour
 		by randomizing the rgb values Color.color(Math.random(), Math.random(), Math.random())**/
@@ -94,6 +94,7 @@ public class BugWorld extends Application{
 		}
 	}
 
+	/**-------------------------------------------------------------------------------------------**/
 	public void addPlants(Stage primaryStage) {
 		for(int i =0;i< (int) (7+Math.random()*12);i++) {//for loop to create between 10 and 15 plants
 			x=50+Math.random()*450;//assigning random number upto the width of the scene to the x variable 
@@ -117,6 +118,7 @@ public class BugWorld extends Application{
 		}
 	}
 
+	/**-------------------------------------------------------------------------------------------**/
 	public void addLadybugs(Stage primaryStage) {
 		/**create new bug in for loop, pass in primaryStage starting positions x and y, radius, color can be a random colour
 		by randomizing the rgb values Color.color(Math.random(), Math.random(), Math.random())**/
@@ -133,6 +135,7 @@ public class BugWorld extends Application{
 		}
 	}
 
+	/**-------------------------------------------------------------------------------------------**/
 	public void addRock(Stage primaryStage) {
 		/**create new bug in for loop, pass in primaryStage starting positions x and y, radius, color can be a random colour
 		by randomizing the rgb values Color.color(Math.random(), Math.random(), Math.random())**/
@@ -148,35 +151,35 @@ public class BugWorld extends Application{
 		}
 	}
 
+	/**-------------------------------------------------------------------------------------------**/
 	//animateWorld method loops through bug list and calls update method 
 	public void animateWorld(Stage primaryStage) {
 		// new keyFrame where rate is 15milliseconds
 		KeyFrame frame = new KeyFrame(Duration.millis(15),new EventHandler<ActionEvent>() { 
 			public void handle(ActionEvent t) {
 				//each bug calls animate method, passing in scene to method 
-				for(Bug b:bugList) {
-					b.update(scene, plantList, bugList, root, rockList);
-					System.out.println(b.getName()+" "+b.getID()+"eaten=" +b.isEaten());
-					if(b.isEaten() == true) {// if bug has been eaten in update method bug is removed from root 
-						root.getChildren().remove(b);
-						System.out.println(b.getName()+" "+b.getID()+" "+ " is dead");
-					}
+				for(Bug bug:bugList) {
+					bug.update(scene, plantList, bugList, root, rockList);
+					//					System.out.println(bug.getName()+" "+bug.getID()+"eaten=" +bug.isEaten());
+					//					if(bug.isEaten() == true) {// if bug has been eaten in update method bug is removed from root 
+					//						root.getChildren().remove(bug);
+					//						System.out.println(bug.getName()+" "+bug.getID()+" "+ " is dead");
+					//					}
 				}
-								for(Plant p:plantList) {
-									p.grow();
-							}
+				for(Plant p:plantList) {
+					p.grow();
+				}
 			}
 		});
 		//make timelinebuilder a variable so can call methods play, pause, stop
 		Timeline tl = TimelineBuilder.create().cycleCount(javafx.animation.Animation.INDEFINITE).keyFrames(frame).build();
-		//tl.play();
 		playButton(tl);
 		pauseButton(tl);
 		stopButton(tl);
 
 	}
 
-
+	/**-------------------------------------------------------------------------------------------**/
 	public void playButton(Timeline tl) {//create play button with tl variable
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
@@ -184,7 +187,7 @@ public class BugWorld extends Application{
 			}
 		});
 	}
-
+	/**-------------------------------------------------------------------------------------------**/
 	public void pauseButton(Timeline tl) {
 
 		pauseButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -201,7 +204,7 @@ public class BugWorld extends Application{
 			}
 		});
 	}
-
+	/**-------------------------------------------------------------------------------------------**/
 	public void AddBeeButton(Stage primaryStage) {//add a new bee on click of add bee button
 
 		addBeeButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -218,8 +221,9 @@ public class BugWorld extends Application{
 			}
 		});
 	}
+	/**-------------------------------------------------------------------------------------------**/
 	public void AddPlantButton(Stage primaryStage) {//add a new bee on click of add plant button
-		
+
 		addPlantButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
 				double randomPlant= Math.random()*2;//random plant generator

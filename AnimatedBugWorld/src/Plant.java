@@ -15,8 +15,11 @@ public class Plant extends Thing {//may change this to just extend circle but fo
 		super(primaryStage, x, y, radius, color);
 
 	}
-
+	// orginally had scale transition animation to shrink and grow plants because 
+	//my animation was acting on the update method not the update/animate world method in bugworld class 
+	//so couldn't use radius becuase loop only happened once
 	public void shrink() {
+// orginally had scale transition animation to shrink and grow bugs because 		
 //		//Creating scale Transition 
 //		ScaleTransition scaleTransition = new ScaleTransition(); 
 //
@@ -40,7 +43,7 @@ public class Plant extends Thing {//may change this to just extend circle but fo
 //		//Playing the animation 
 //		scaleTransition.play(); 
 		
-		this.setRadius(this.getRadius()-1);
+		this.setRadius(this.getRadius()-1);//subtract one from plant radius
 
 		if(this.getRadius() < 1) { // if plant is below size threshold, reduces radius to 0
 			this.setRadius(0);

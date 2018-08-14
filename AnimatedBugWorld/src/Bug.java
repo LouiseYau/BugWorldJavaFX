@@ -18,21 +18,27 @@ import javafx.util.Duration;
 /**to do list: 
 
  * Create method where bugs become hungry and seek food and fade over time if they do not eat
-
+ 
  * If they are not hungry they stop eating move away from plant
 
- *Method for bugs reproduce if they bugs of diff colour if they get to a certain size and meet another bug
- of the same size
+ *Method for bugs to reproduce if they get to a certain size and meet another bug
+ of the same size 
 
- *New plant generated elsewhere
+ *New plant generated elsewhere if it dies
 
  *Drag objects and bugs around (if bugs get stuck)
 
  *Place bugs with clicks
 
- *add specific number bugs or objects
-
+ *add user input field for specific number bugs or objects
+ *
+ *Turn into game:
+ *control bugs with mouse or keyboard to catch other bugs or avoid other bugs (maybe two player)
+ *bees faster than ladybugs to give them a chance to escape
+ *if bug eats food their speed increases a bit so they can more easily catch or escape other bugs
+ *bees turn carnivorous once they rach a certain size
  *if no bees left carnivors eat eachother
+ *last bug alive wins
  **/
 
 public class Bug extends Circle {
@@ -41,11 +47,9 @@ public class Bug extends Circle {
 	protected int id = 0;
 	protected static int idCounter;
 	protected String name;
-
-
 	private Stage primaryStage;
-	boolean eaten = false;
-	boolean eating = false;
+	private boolean eaten = false;
+	private boolean eating = false;
 	public Bug(Stage primaryStage,double x, double y, double radius, Color color, String name) {
 		super(x,y,radius,color);
 		this.id = idCounter++;
@@ -57,7 +61,7 @@ public class Bug extends Circle {
 	}
 
 	/**----------------------------------------------------------------------------------------
-	 * @param rockList **/
+	 *main update method that moves/rows/shrinks the bugs and plants **/
 	public void update(Scene scene,List<Plant> plantList, List<Bug> bugList, Group root, List<Rock> rockList) {
 		//all bugs move randomly
 		moveRandom();
@@ -91,17 +95,17 @@ public class Bug extends Circle {
 	//method to decrease size of plant if bee lands on it
 	public void eatPlants(List<Plant> plantList, List<Bug> bugList, Group root) {
 
-		for (Plant p : plantList) {//iterate through arrayList of plants
+		for (Plant plant : plantList) {//iterate through arrayList of plants
 			//if bounds of plant intersects with bounds of the bug calling animate(); then found is true
-			if (p.getBoundsInParent().intersects(getBoundsInParent())) {
-				p.shrink();//plant shrinks
+			if (plant.getBoundsInParent().intersects(getBoundsInParent())) {
+				plant.shrink();//plant shrinks
 				this.eat();//bee eats plant
 				moveRandom();
-				if(p.getRadius()==0) {//if plant radius = 0 then plant is removed form group
-					root.getChildren().remove(p);
+				if(plant.getRadius()==0) {//if plant radius = 0 then plant is removed form group
+					root.getChildren().remove(plant);
 					//remove plant from arraylist as well as root becuase bees seemed to be getting stuck on plants that existed in the array but not root
 					//bees nolonger seem to get stuck on nothing 
-					plantList.remove(p);
+					plantList.remove(plant);
 				}
 
 
@@ -116,21 +120,21 @@ public class Bug extends Circle {
 	public void eatOtherBugs( List<Bug> bugList, Group root) {	
 		boolean meet = false;
 
-		for (Bug b:bugList) {
+		for (Bug bug:bugList) {
 
-			if (this.getBoundsInParent().intersects(b.getBoundsInParent())||b.getBoundsInParent().intersects(this.getBoundsInParent())) 
+			if (this.getBoundsInParent().intersects(bug.getBoundsInParent())||bug.getBoundsInParent().intersects(this.getBoundsInParent())) 
 			{
 				meet = true;
 				if (meet){
 
 					this.eat();
-					if(b instanceof Bee) {
-						root.getChildren().remove(b);
+					if(bug instanceof Bee) {
+						root.getChildren().remove(bug);
 						//needed to remove from arraylist aswell as root because bees in arraylist were eating plants ?
-						//plants not disapearing on their own
-						bugList.remove(b);
+						//plants not disapearing on their own anymore
+						bugList.remove(bug);
 					}
-					System.out.println(name+" ID="+id+" "+b.name+" "+b.id+" eaten="+b.eaten);
+					System.out.println(name+" ID="+id+" "+bug.name+" "+bug.id+" eaten="+bug.eaten);
 
 					break;
 				}
@@ -183,8 +187,8 @@ public class Bug extends Circle {
 
 	public void avoidRock(List<Rock> rockList) {
 
-		for(Rock r:rockList) {
-			if (r.getBoundsInParent().intersects(getBoundsInParent())) {
+		for(Rock rock:rockList) {
+			if (rock.getBoundsInParent().intersects(getBoundsInParent())) {
 				dx=-dx;
 				dy=-dy;
 				moveRandom();
