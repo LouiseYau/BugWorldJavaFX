@@ -34,6 +34,68 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+/**to do list: 
+*add background
+
+ * Create method where bugs become hungry and seek food and fade over time if they do not eat
+ 
+ * If they are not hungry they stop eating move away from plant
+
+ *Method for bugs to reproduce if they get to a certain size and meet another bug
+ of the same size 
+
+ *New plant generated elsewhere if it dies
+
+ *Drag objects and bugs around (if bugs get stuck)
+
+ *Place bugs with clicks
+
+ *add user input field for specific number bugs or objects
+ *
+ *Turn into game:
+ *control bugs with mouse or keyboard to catch other bugs or avoid other bugs (maybe two player)
+ *bees faster than ladybugs to give them a chance to escape
+ *if bug eats food their speed increases a bit so they can more easily catch or escape other bugs
+ *bees turn carnivorous once they rach a certain size
+ *if no bees left carnivors eat eachother
+ *last bug alive wins
+ **/
+
+/** 
+ * past issues:
+ * couldn't grow and shrink plants and bugs with setRadius (workaround  used scaletransition animations to do this but then couldn't grow and shrink objects at the same time).
+ * Wrote a sysout for the object's radiuses and found that they were not updating when bug ate or plant was supposed to shrink.
+ * I think this was because only called animate method on bugs once and animation timeline builder was in bug class
+ * so only looped over bugs and plants once. Moved timeline builder back to bugworld and placed it around the for loops that called the animate and grow methods
+ *so if object radius was set to new value the next keyframe and loop over objects showed this update.  
+ * 
+ * plants were disapearing by themselves and bees/ladybugs seemed to get stuck on nothing
+ * this issues was resolved by removing plants and bugs from arraylists once they had been eaten. 
+ * I think this resolved the issue because when arraylist looped the existing bugs still came across the bugs stored int eh arraylist
+ * even though these bugs had been removed from the group. Similarily if a dead bee was on a plant when it was eaten by a ladybug
+ * the arraylist still found it intersecting with a plant so plant shrank.
+ * 
+ * when first implemented move random method bugs appeared to just shake and not move, added a random number generator upto 30
+ *so that they only changed direction if the number generated was less than 1 (so had a 1 in 30 chance of changing direction and they can then
+ *keep moving in the same direction for longer)
+ * 
+ * 
+ * current issues:
+ * ladybugs grow together, probably something to do with the loop or if instance of ladybug, however if i put
+ * break in the eatPlants method anywher ebut where i currently have it only the first bug grows 
+ * 
+ * ladybugs also seem to grow overtime and then also when press stop or pause
+ * 
+ * bugs get stuck on rocks- need a method where bug moves away from rock depending on where the rock is in relation to the bug
+ * as opposed to randomly
+ * 
+ * when new bees added after the animation has started the bees cannot be eaten by the ladybugs however the bees can still 
+ * eat the plants. Also the ladybugs pass under the bees and plants. 
+ * - something to do with the order in which the objects are added to the scene?
+ * 
+ * 
+ * **/
+
 public class BugWorld extends Application{
 	private static final int INDEFINITE = 0;
 	private int width = 550, height = 450;// width and height of stage
