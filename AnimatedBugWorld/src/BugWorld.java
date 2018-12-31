@@ -93,10 +93,9 @@ import javafx.geometry.Pos;
  * eat the plants. Also the ladybugs pass under the bees and plants. 
  * - something to do with the order in which the objects are added to the scene?
  * 
- * 
  * **/
 
-public class BugWorld extends Application{
+public class BugWorld extends Application{ 
 	private static final int INDEFINITE = 0;
 	private int width = 550, height = 450;// width and height of stage
 	private double x, y; //x and y values of centre of circles (bugs and plants)
@@ -114,11 +113,12 @@ public class BugWorld extends Application{
 	private Button stopButton = new Button("stop");
 	private Button addBeeButton = new Button("add bee");
 	private Button addPlantButton = new Button("add plant");
-
+	
 
 	//primaryStage is passed into the start method
 	public void start(Stage primaryStage) throws Exception {
-
+		Image image = new Image("sand.png");		
+		scene.setFill(new ImagePattern(image));
 		primaryStage.setTitle("Bug World");//title of stage is Bug World
 		root.getChildren().add(pane);
 		pane.setAlignment(Pos.CENTER);
@@ -132,21 +132,58 @@ public class BugWorld extends Application{
 		primaryStage.setScene(scene);//setting primaryStage scene to scene that was defined above
 		addRock(primaryStage);
 		addPlants(primaryStage);
-		AddBeeButton(primaryStage);
-		AddPlantButton(primaryStage);
+		addBeeButton(primaryStage);
+		addPlantButton(primaryStage);
 		addBee(primaryStage);
 		addLadybugs(primaryStage);
 		animateWorld(primaryStage);
+		for(Plant p:plantList) {
+			System.out.println(p.getCenterX()+" "+p.getCenterY());
+		}
+		System.out.println(" ");
 		primaryStage.show();
+	}
+
+	
+	/**-------------------------------------------------------------------------------------------**/
+	//animateWorld method loops through bug list and calls update method 
+	public void animateWorld(Stage primaryStage) {
+		// new keyFrame where rate is 15milliseconds
+		KeyFrame frame = new KeyFrame(Duration.millis(15),new EventHandler<ActionEvent>() { 
+			public void handle(ActionEvent t) {
+				//each bug calls animate method, passing in scene to method 
+				for(Bug bug:bugList) {
+					bug.update(scene, plantList, bugList, root, rockList);
+				
+					bug.distanceBetweenPlantAndBee(plantList);
+					
+					//					System.out.println(bug.getName()+" "+bug.getID()+"eaten=" +bug.isEaten());
+					//					if(bug.isEaten() == true) {// if bug has been eaten in update method bug is removed from root 
+					//						root.getChildren().remove(bug);
+					//						System.out.println(bug.getName()+" "+bug.getID()+" "+ " is dead");
+					//					}
+				}
+				for(Plant p:plantList) {
+					p.grow(plantList, root);
+				}
+			}
+		});
+		//make timelinebuilder a variable so can call methods play, pause, stop
+		Timeline tl = TimelineBuilder.create().cycleCount(javafx.animation.Animation.INDEFINITE).keyFrames(frame).build();
+		playButton(tl);
+		pauseButton(tl);
+		stopButton(tl);
+
 	}
 
 	/**-------------------------------------------------------------------------------------------**/
 	public void addBee(Stage primaryStage) {
 		/**create new bug in for loop, pass in primaryStage starting positions x and y, radius, color can be a random colour
 		by randomizing the rgb values Color.color(Math.random(), Math.random(), Math.random())**/
-		for(int i = 0; i<25;i++) {//for loop to create 10 bees
-			x=50+Math.random()*width-100;//assigning random number upto the width of the scene to the x variable 
-			y=50+Math.random()*height-100;//assigning random number upto the height of the scene to the y variable
+		for(int i = 0; i< (int) (15+Math.random()*25);i++) {//for loop to create 10 bees
+			//for(int i = 0; i< (int) 5;i++) {
+			x=10+Math.random()*width-100;//assigning random number upto the width of the scene to the x variable 
+			y=20+Math.random()*height-100;//assigning random number upto the height of the scene to the y variable
 			radius = 10;
 			Bug bee = new Bee(primaryStage, x,y,radius,Color.YELLOW,"Bee");
 			Image image = new Image("Bumblebee.png");
@@ -201,7 +238,7 @@ public class BugWorld extends Application{
 	public void addRock(Stage primaryStage) {
 		/**create new bug in for loop, pass in primaryStage starting positions x and y, radius, color can be a random colour
 		by randomizing the rgb values Color.color(Math.random(), Math.random(), Math.random())**/
-		for(int i = 0; i<5;i++) {//for loop to create 10 bees
+		for(int i = 0; i<4;i++) {//for loop to create 10 bees
 			x=50+Math.random()*width-50;//assigning random number upto the width of the scene to the x variable 
 			y=50+Math.random()*height-80;//assigning random number upto the height of the scene to the y variable
 			radius = 20;
@@ -213,34 +250,7 @@ public class BugWorld extends Application{
 		}
 	}
 
-	/**-------------------------------------------------------------------------------------------**/
-	//animateWorld method loops through bug list and calls update method 
-	public void animateWorld(Stage primaryStage) {
-		// new keyFrame where rate is 15milliseconds
-		KeyFrame frame = new KeyFrame(Duration.millis(15),new EventHandler<ActionEvent>() { 
-			public void handle(ActionEvent t) {
-				//each bug calls animate method, passing in scene to method 
-				for(Bug bug:bugList) {
-					bug.update(scene, plantList, bugList, root, rockList);
-					//					System.out.println(bug.getName()+" "+bug.getID()+"eaten=" +bug.isEaten());
-					//					if(bug.isEaten() == true) {// if bug has been eaten in update method bug is removed from root 
-					//						root.getChildren().remove(bug);
-					//						System.out.println(bug.getName()+" "+bug.getID()+" "+ " is dead");
-					//					}
-				}
-				for(Plant p:plantList) {
-					p.grow();
-				}
-			}
-		});
-		//make timelinebuilder a variable so can call methods play, pause, stop
-		Timeline tl = TimelineBuilder.create().cycleCount(javafx.animation.Animation.INDEFINITE).keyFrames(frame).build();
-		playButton(tl);
-		pauseButton(tl);
-		stopButton(tl);
-
-	}
-
+	
 	/**-------------------------------------------------------------------------------------------**/
 	public void playButton(Timeline tl) {//create play button with tl variable
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -267,7 +277,7 @@ public class BugWorld extends Application{
 		});
 	}
 	/**-------------------------------------------------------------------------------------------**/
-	public void AddBeeButton(Stage primaryStage) {//add a new bee on click of add bee button
+	public void addBeeButton(Stage primaryStage) {//add a new bee on click of add bee button
 
 		addBeeButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
@@ -284,7 +294,7 @@ public class BugWorld extends Application{
 		});
 	}
 	/**-------------------------------------------------------------------------------------------**/
-	public void AddPlantButton(Stage primaryStage) {//add a new bee on click of add plant button
+	public void addPlantButton(Stage primaryStage) {//add a new bee on click of add plant button
 
 		addPlantButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
@@ -305,7 +315,7 @@ public class BugWorld extends Application{
 				root.getChildren().add(p);
 			}
 		});
-	}
+	} 
 
 
 	public static void main(String[] args) {

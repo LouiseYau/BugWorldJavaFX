@@ -1,5 +1,10 @@
+import java.util.List;
+
 import javafx.animation.ScaleTransition;
+import javafx.scene.Group;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -53,40 +58,36 @@ public class Plant extends Thing {//may change this to just extend circle but fo
 	//}
 	
 
-	public void grow() {
-//		//Creating scale Transition 
-//		ScaleTransition scaleTransition = new ScaleTransition(); 
-//
-//		//Setting the duration for the transition 
-//		scaleTransition.setDuration(Duration.millis(20)); 
-//
-//		//Setting the node for the transition 
-//		scaleTransition.setNode(this); 
-//
-//		//Setting the dimensions for scaling 
-//		scaleTransition.setByY(0.006); 
-//
-//		scaleTransition.setByX(0.006); 
-//
-//		//Setting the cycle count for the translation 
-//		scaleTransition.setCycleCount(1); 
-//
-//		//Setting auto reverse value to true 
-//		//scaleTransition.setAutoReverse(true); 
-//
-//		//Playing the animation 
-//		scaleTransition.play(); 
-	
-
-			if(this.getRadius() < 20) {
-				this.setRadius(this.getRadius()+0.025);
+	public void grow(List<Plant> plantList, Group root) {
+double newPlant = Math.random()*200; 
+			if(this.getRadius() < 22) {
+				this.setRadius(this.getRadius()+0.05);
 			}
 
-			if(this.getRadius() > 25) {
-				this.setRadius(25);
+//			if(this.getRadius()>22&& newPlant<1) {
+//				addPlant(plantList, root);
+//			}
+			if(this.getRadius() > 23) {
+				this.setRadius(22);
 			}
 		}
-
+	public void addPlant(List<Plant> plantList, Group root){
+	double randomPlant= Math.random()*2;//random plant generator
+	double x=5+Math.random()*500;//assigning random number upto the width of the scene to the x variable 
+	double y=5+Math.random()*450;//assigning random number upto the height of the scene to the y variable
+	double radius = 20;//random radius/size of circle
+	Plant p = new Plant(primaryStage, x,y,radius,Color.GREEN);
+	if(randomPlant<1) {
+		Image image = new Image("flowers2.png");
+		p.setFill(new ImagePattern(image));
+	}
+	else {
+		Image image = new Image("kale.png");
+		p.setFill(new ImagePattern(image));
+	}
+	plantList.add(p);//add bug to bugList 
+	root.getChildren().add(p);
+}
 	
 
 	public double getDx() {

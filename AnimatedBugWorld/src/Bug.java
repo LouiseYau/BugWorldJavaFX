@@ -15,35 +15,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
-/**to do list: 
-
- * Create method where bugs become hungry and seek food and fade over time if they do not eat
- 
- * If they are not hungry they stop eating move away from plant
-
- *Method for bugs to reproduce if they get to a certain size and meet another bug
- of the same size 
-
- *New plant generated elsewhere if it dies
-
- *Drag objects and bugs around (if bugs get stuck)
-
- *Place bugs with clicks
-
- *add user input field for specific number bugs or objects
- *
- *Turn into game:
- *control bugs with mouse or keyboard to catch other bugs or avoid other bugs (maybe two player)
- *bees faster than ladybugs to give them a chance to escape
- *if bug eats food their speed increases a bit so they can more easily catch or escape other bugs
- *bees turn carnivorous once they rach a certain size
- *if no bees left carnivors eat eachother
- *last bug alive wins
- **/
-
 public class Bug extends Circle {
-	private double dx = -1.5f+Math.random()*3;
-	private double dy = -1.5f+Math.random()*3;
+	protected double dx = -1.5f+Math.random()*3;
+	protected double dy = -1.5f+Math.random()*3;
 	protected int id = 0;
 	protected static int idCounter;
 	protected String name;
@@ -61,15 +35,20 @@ public class Bug extends Circle {
 	}
 
 	/**----------------------------------------------------------------------------------------
-	 *main update method that moves/rows/shrinks the bugs and plants **/
-	public void update(Scene scene,List<Plant> plantList, List<Bug> bugList, Group root, List<Rock> rockList) {
+	 *main update method that moves/rows/shrinks the bugs and plants 
+	 * @param  **/
+	public void update(Scene scene,List<Plant> plantList, List<Bug> bugList, Group root, List<Rock> rockList ) {
 		//all bugs move randomly
 		moveRandom();
 		avoidRock(rockList);
 		//if this is instance of a bee, bee eats plants and plants shrink
 		if(this instanceof Bee) {
+		//find food memthod currently is stopping bees from moving away from plants	
+			//findFood(plantList);
 			eatPlants(plantList, bugList,root);
+			
 		}
+		
 		// if this is instance of ladybug then ladybug eats bees
 		if(this instanceof Ladybug) {
 			eatOtherBugs(bugList, root);
@@ -85,11 +64,16 @@ public class Bug extends Circle {
 			dy = -dy;
 
 		}
-		//if none of the above bugs move forward
+//		//if none of the above bugs move forward
 		setTranslateX(getTranslateX()+dx);//look up translate
 		setTranslateY(getTranslateY()+dy);
 
 	}
+	public void findFood(List<Plant> plantList) {
+//	moveRandom();
+		
+	}
+
 	/**---------------------------------------------------------------------------------------------**/
 
 	//method to decrease size of plant if bee lands on it
@@ -100,7 +84,7 @@ public class Bug extends Circle {
 			if (plant.getBoundsInParent().intersects(getBoundsInParent())) {
 				plant.shrink();//plant shrinks
 				this.eat();//bee eats plant
-				moveRandom();
+				//moveRandom();
 				if(plant.getRadius()==0) {//if plant radius = 0 then plant is removed form group
 					root.getChildren().remove(plant);
 					//remove plant from arraylist as well as root becuase bees seemed to be getting stuck on plants that existed in the array but not root
@@ -148,7 +132,7 @@ public class Bug extends Circle {
 
 	/**----------------------------------------------------------------------------------------**/
 	public void moveRandom() {
-		double changeChecker = Math.random()*40;//generate a random number between 0 and 30
+		double changeChecker = Math.random()*15;//generate a random number between 0 and 30
 
 		if (changeChecker<1) {//bug has a 1 in 30 chance of changing direction
 
@@ -171,16 +155,24 @@ public class Bug extends Circle {
 		//amount object should increase by 
 		scaleTransition.setByY(0.33); 
 
-		scaleTransition.setByX(0.33); 
+		scaleTransition.setByX(0.33);  
 
 		//number of times to repeat animation on each call
 		scaleTransition.setCycleCount(1); 
 
 		//Playing the animation 
-		scaleTransition.play(); 
+//		scaleTransition.play(); 
+//		if(this.getRadius() < 15) {
+//			this.setRadius(this.getRadius()+0.125);
+//		}
+//		if(this.getRadius() > 15) {
+//			this.setRadius(15);
+//		}
 
 
 	}
+
+	//}
 
 
 	/**-----------------------------------------------------------------------**/
@@ -195,11 +187,17 @@ public class Bug extends Circle {
 			}
 		}
 	}
-	public void findPlants() {
+	
+	public boolean smellFood() {
+		
+		
+		
+		return true;
 
 	}
+	
 
-	public void findBees() {
+	public void moveTowards() {
 
 	}
 
@@ -239,6 +237,11 @@ public class Bug extends Circle {
 
 	public void setDy(double dy) {
 		this.dy = dy;
+	}
+
+	public void distanceBetweenPlantAndBee(List<Plant> plantList) {
+		// TODO Auto-generated method stub
+		
 	}
 
 
